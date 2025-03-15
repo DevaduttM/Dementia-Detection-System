@@ -5,7 +5,6 @@ from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 
-# ✅ Allow only your frontend URL (Update the port if needed)
 CORS(app, resources={r"/login": {"origins": "http://localhost:3001"}})
 
 # MongoDB Connection
