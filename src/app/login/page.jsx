@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,22 +15,17 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await fetch("http://127.0.0.1:5000", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post("http://127.0.0.1:5000/login", {
+        email, // Use email directly
+        password,
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("user", email);
-        router.push("/"); 
-      } else {
-        setError(data.error || "Invalid email or password");
+      if (response.status === 200) {
+        localStorage.setItem("user", email); // Store email in local storage
+        router.push("/"); // Redirect to home page
       }
     } catch (err) {
-      setError("Server error. Please try again later.");
+      setError(err.response?.data?.message || "Invalid email or password"); // Handle error message
     }
   };
 
