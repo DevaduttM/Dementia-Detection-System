@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import axios from "axios";
-import axios from "axios";
+
 
 
 const Login = () => {
