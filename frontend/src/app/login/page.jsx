@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import axios from "axios";
+import axios from "axios";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,16 +18,17 @@ const Login = () => {
 
     try {
       const response = await axios.post("http://127.0.0.1:5000/login", {
-        email, // Use email directly
+        email,
         password,
       });
 
       if (response.status === 200) {
-        localStorage.setItem("user", email); // Store email in local storage
-        router.push("/"); // Redirect to home page
+        localStorage.setItem("user", email);
+        router.push("/");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid email or password"); // Handle error message
+      setError(err.response?.data?.message || "Invalid email or password");
+
     }
   };
 
