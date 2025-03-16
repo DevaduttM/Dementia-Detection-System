@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import axios from "axios";
 
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +28,7 @@ const Login = () => {
       }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password");
+
     }
   };
 

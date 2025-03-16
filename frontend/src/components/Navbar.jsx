@@ -1,6 +1,6 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+"use client"
+import React from "react";
+import {motion}  from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -43,6 +43,9 @@ const Navbar = () => {
           ))}
           <Link href="/model" className="text-black hover:text-gray-600 transition duration-200">Model</Link>
         </div>
+        <button className="w-[8%] h-[55%] rounded-lg bg-black text-white hover:bg-gray-800 transition duration-300">
+          Login
+        </button>
 
         {user ? (
           <button
@@ -65,4 +68,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
