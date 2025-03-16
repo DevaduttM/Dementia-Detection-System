@@ -2,7 +2,11 @@
 
 # dependencies
 /node_modules
+<<<<<<< Updated upstream
 /myenv
+=======
+
+>>>>>>> Stashed changes
 
 /.pnp
 .pnp.*
