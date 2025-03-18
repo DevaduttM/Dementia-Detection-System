@@ -20,8 +20,8 @@ const Landing = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center overflow-hidden">
-      <div className="h-full w-[60%] flex items-start justify-center px-[5rem] bg-[#f8d8d8] flex-col">
+    <div className="h-screen w-screen flex md:flex-row flex-col items-center justify-center overflow-hidden">
+      <div className="md:h-full h-[60%] md:w-[60%] w-full flex items-start justify-center md:px-[5rem] px-5 bg-[#f8d8d8] flex-col">
         <motion.h1
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -44,14 +44,14 @@ const Landing = () => {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        className="relative h-full w-[40%] flex items-center bg-blue-400 justify-center"
+        className="relative md:h-full h-[40%] md:w-[40%] w-full flex items-center bg-blue-400 justify-center"
       >
         <motion.div
           variants={imageVariants}
           initial="hidden"
           animate="show"
           custom={0}
-          className="absolute h-[25vw] aspect-square bg-white p-2 left-[5rem] top-[6rem]"
+          className="absolute md:h-[25vw] h-[60vw] aspect-square bg-white p-2 md:left-[5rem] md:top-[7rem] left-[2rem] top-[3rem]"
         >
           <div className="relative w-full h-full">
             <Image 
@@ -68,7 +68,7 @@ const Landing = () => {
           initial="hidden"
           animate="show"
           custom={0.5}
-          className="relative h-[25vw] aspect-square bg-white p-2 bottom-[-10rem] right-[-6rem] rotate-[5deg]"
+          className="relative md:h-[25vw] h-[60vw] aspect-square bg-white p-2 md:bottom-[-15rem] md:right-[-6rem] bottom-[-5em] right-[-4rem] rotate-[5deg]"
         >
           <div className="relative w-full h-full">
             <Image 
