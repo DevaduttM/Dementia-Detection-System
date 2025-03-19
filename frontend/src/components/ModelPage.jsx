@@ -5,6 +5,8 @@ import { FiUpload } from "react-icons/fi";
 import ResultPage from "./ResultPage";
 import Navbar from "./Navbar";
 import { motion } from "framer-motion";
+import axios from "axios";
+import Loading from "./Loading";
 
 const ModelPage = () => {
   const [file, setFile] = useState(null); // Changed "" to null for clarity
@@ -12,6 +14,7 @@ const ModelPage = () => {
   const [patientId, setPatientId] = useState("");
   const [result, setResult] = useState(null); // Added state for prediction result
   const fileInput = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -25,29 +28,29 @@ const ModelPage = () => {
       const formData = new FormData();
       formData.append("image", file);
       formData.append("patientId", patientId);
-
+      setLoading(true);
+  
       try {
-        const response = await fetch("http://localhost:5000/predict", {
-          method: "POST",
-          body: formData,
+        const response = await axios.post("http://localhost:5000/predict", formData, {
+
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
-        const data = await response.json();
-        if (response.ok) {
-          setResult(data); // Store the prediction result
-          setSubmitted(true); // Mark as submitted
-        } else {
-          alert(data.error || "Something went wrong"); // Use error message from server
-        }
+        setLoading(false);
+  
+        setResult(JSON.stringify(response.data)); // Store the prediction result
+        setSubmitted(true); // Mark as submitted
       } catch (err) {
         console.error("Error submitting form:", err);
-        alert("An error occurred while submitting the form.");
+        alert(err.response?.data?.error || "An error occurred while submitting the form.");
       }
     } else {
       alert("Please fill all the fields");
     }
   };
-
+  
   return (
     <>
       <Navbar />
@@ -114,7 +117,9 @@ const ModelPage = () => {
       {submitted && (
         <ResultPage ImgURL={URL.createObjectURL(file)} result={result} />
       )}
+      {loading && <Loading />}
     </>
+
   );
 };
 

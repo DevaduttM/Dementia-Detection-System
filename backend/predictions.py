@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing import image
 
 # Load the model once when the module is imported
 model = tf.keras.models.load_model("alzheimers_classification_model.h5",compile=False)
-class_labels = ["MildDemented", "ModerateDemented", "NonDemented", "VeryMildDemented"]
+class_labels = ["Mild Demented", "Moderate Demented", "Non Demented", "Very Mild Demented"]
 
 def predict_alzheimers(img_path):
     img = image.load_img(img_path, target_size=(150, 150))
