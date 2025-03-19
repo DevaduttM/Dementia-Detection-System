@@ -4,8 +4,12 @@ import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 
-const ResultPage = ({ ImgURL }) => {
+const ResultPage = ({ ImgURL, result }) => {
+  const resultData = JSON.parse(result);
 
+  const [prediction, setPrediction] = useState(resultData.prediction.class);
+  const [confidence, setConfidence] = useState(Number(resultData.prediction.confidence).toFixed(2));
+  const [patientId, setPatientId] = useState(resultData.patientId);
   return (
     <>
       <div className= "absolute top-0 left-0 h-screen min-h-fit w-screen flex justify-center md:flex-row flex-col items-center bg-[#f1e4e4] pt-[4rem]">
@@ -15,7 +19,7 @@ const ResultPage = ({ ImgURL }) => {
               <FaUserCircle className="text-[#a3a3a3] text-8xl" />
               <div className="h-[70%] w-[80%] flex justify-center items-start flex-col gap-5">
                 <p className="text-black  text-left">Patient Name: </p>
-                <p className="text-black  text-left">Patient Id: </p>
+                <p className="text-black  text-left">Patient Id: {patientId} </p>
                 <p className="text-black  text-left">Scan Id: </p>
               </div>
             </div>
@@ -32,8 +36,9 @@ const ResultPage = ({ ImgURL }) => {
           </div>
         </div>
         <div className="md:w-[70%] w-[90%] h-[95%] flex items-center justify-center mb-10 md:mb-0">
-            <div className="relative w-[90%] h-full bg-[#fafaf6] shadow-2xl rounded-xl flex items-center justify-center">
-                <h1 className="text-4xl text-black font-bodoni-moda ml-5 mt-5">Result</h1>
+            <div className="relative w-[90%] h-full bg-[#fafaf6] shadow-2xl rounded-xl flex flex-col items-center justify-center">
+                <h1 className="text-4xl text-black font-bodoni-moda ml-5 mt-5">Diagnosis: {prediction}</h1>
+                <h1 className="text-4xl text-black font-bodoni-moda ml-5 mt-5">Confidence: {confidence} %</h1>
                 <button onClick={() => window.location.reload()} className="bg-blue-500 flex justify-center items-center text-white w-[8rem] h-[3rem] rounded-lg absolute bottom-3">Go Back</button>
             </div>
         </div>
