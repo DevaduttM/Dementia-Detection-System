@@ -44,6 +44,7 @@ const ModelPage = () => {
         setSubmitted(true); // Mark as submitted
       } catch (err) {
         console.error("Error submitting form:", err);
+        setLoading(false);
         alert(err.response?.data?.error || "An error occurred while submitting the form.");
       }
     } else {
