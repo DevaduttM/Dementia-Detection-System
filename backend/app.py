@@ -3,9 +3,10 @@ from flask_cors import CORS
 from flask_pymongo import PyMongo
 from cryptography.fernet import Fernet
 import certifi
+from predictions import predict_alzheimers
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000"])
+CORS(app)
 
 app.config["MONGO_URI"] = "mongodb+srv://sauravkreji:GYRAH53ZLpSR9YB4@cluster0.81y7c.mongodb.net/Dimentia-detection-system?retryWrites=true&w=majority"
 mongo = PyMongo(app, tlsCAFile=certifi.where())
@@ -49,6 +50,25 @@ def authenticate():
     else:
         print("User Not Found!")
         return jsonify({"error": "User not found"}), 404
+    
+@app.route('/predict',methods = ["POST"])
+def predict():
+    if "image" not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    
+    img_file = request.files["image"]
+    patient_id = request.form.get("patientId")
+
+    if not patient_id:
+        return jsonify({"error": "Please provide patientId"}), 400
+    
+    try:
+        result = predict_alzheimers(img_file)
+
+        return jsonify({"patientId": patient_id,"prediction":result}), 200
+    except Exception as e:
+        print(f"Prediction Error: {e}")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
