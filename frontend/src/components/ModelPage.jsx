@@ -9,10 +9,10 @@ import axios from "axios";
 import Loading from "./Loading";
 
 const ModelPage = () => {
-  const [file, setFile] = useState(null); // Changed "" to null for clarity
-  const [submitted, setSubmitted] = useState(false); // Use boolean instead of 0/1
+  const [file, setFile] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
   const [patientId, setPatientId] = useState("");
-  const [result, setResult] = useState(null); // Added state for prediction result
+  const [result, setResult] = useState(null);
   const fileInput = useRef(null);
   const [loading, setLoading] = useState(false);
 
@@ -29,29 +29,27 @@ const ModelPage = () => {
       formData.append("image", file);
       formData.append("patientId", patientId);
       setLoading(true);
-  
-      try {
-        const response = await axios.post("http://localhost:5000/predict", formData, {
 
+      try {
+        const response = await axios.post("http://127.0.0.1:5000/predict", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-
         setLoading(false);
-  
-        setResult(JSON.stringify(response.data)); // Store the prediction result
-        setSubmitted(true); // Mark as submitted
+        setResult(JSON.stringify(response.data));
+        setSubmitted(true);
       } catch (err) {
-        console.error("Error submitting form:", err);
         setLoading(false);
-        alert(err.response?.data?.error || "An error occurred while submitting the form.");
+        console.error("Error submitting form:", err);
+        const errorMessage = err.response?.data?.error || "An error occurred while submitting the form.";
+        alert(errorMessage);
       }
     } else {
       alert("Please fill all the fields");
     }
   };
-  
+
   return (
     <>
       <Navbar />
@@ -120,7 +118,6 @@ const ModelPage = () => {
       )}
       {loading && <Loading />}
     </>
-
   );
 };
 
