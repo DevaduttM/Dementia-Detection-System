@@ -25,23 +25,48 @@ const ModelPage = () => {
 
   const handleSubmit = async () => {
     if (file && patientId) {
+      setLoading(true);
+
       const formData = new FormData();
       formData.append("image", file);
       formData.append("patientId", patientId);
-      setLoading(true);
 
       try {
-        const response = await axios.post("http://127.0.0.1:5000/predict", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+        console.log("Sending POST to /predict with patientId:", patientId);
+        const predictResponse = await axios.post("http://127.0.0.1:5000/predict", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
-        setLoading(false);
-        setResult(JSON.stringify(response.data));
+        console.log("Predict response:", predictResponse.data);
+
+        let patientName = "Unknown Patient";
+        try {
+          console.log("Fetching patient data for patientId:", patientId);
+          const patientResponse = await axios.get(`http://127.0.0.1:5000/patient?patient_id=${patientId}`);
+          console.log("Patient response:", patientResponse.data);
+          if (patientResponse.status === 200) {
+            patientName = patientResponse.data.patientName;
+          }
+        } catch (patientErr) {
+          console.error("Patient fetch error:", patientErr.response?.status, patientErr.response?.data);
+          if (patientErr.response?.status === 404) {
+            console.log(`Patient with ID ${patientId} not found, using default name`);
+          } else {
+            throw patientErr;
+          }
+        }
+
+        const combinedResult = {
+          ...predictResponse.data,
+          patientName: patientName,
+        };
+        console.log("Combined result before stringifying:", combinedResult);
+        setResult(JSON.stringify(combinedResult));
         setSubmitted(true);
+        setLoading(false);
       } catch (err) {
         setLoading(false);
         console.error("Error submitting form:", err);
+        console.error("Error details:", err.response?.status, err.response?.data);
         const errorMessage = err.response?.data?.error || "An error occurred while submitting the form.";
         alert(errorMessage);
       }
@@ -114,7 +139,12 @@ const ModelPage = () => {
         </button>
       </motion.div>
       {submitted && (
-        <ResultPage ImgURL={URL.createObjectURL(file)} result={result} />
+        <div>
+          <pre style={{ margin: "10px", fontSize: "14px", background: "#f0f0f0", padding: "10px" }}>
+            Debug - Result Prop: {result}
+          </pre>
+          <ResultPage ImgURL={URL.createObjectURL(file)} result={result} />
+        </div>
       )}
       {loading && <Loading />}
     </>
