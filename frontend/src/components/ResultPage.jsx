@@ -1,17 +1,24 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 
 const ResultPage = ({ ImgURL, result }) => {
   const resultData = JSON.parse(result);
-  console.log("ResultPage received resultData:", resultData); 
+  console.log("ResultPage received resultData:", resultData);
 
   const prediction = resultData.prediction.class;
   const confidence = Number(resultData.prediction.confidence).toFixed(2);
   const patientId = resultData.patientId;
   const patientName = resultData.patientName;
-  
+  const patienthistory = resultData.patienthistory;
+
+ 
+
+
+  useEffect(() => {
+    console.log("Patient History (useEffect):", patienthistory);
+  }, [patienthistory]);
 
   return (
     <div className="absolute top-0 left-0 h-screen min-h-fit w-screen flex justify-center md:flex-row flex-col items-center bg-[#f1e4e4] pt-[4rem]">
