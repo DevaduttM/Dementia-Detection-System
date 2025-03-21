@@ -58,13 +58,15 @@ def get_patient():
         
         patient = mongo.db["Dimentia-detection-system-Patient"].find_one(
             {"patient_id": patient_id}, 
-            {"_id": 0, "patient_name": 1,"patient_history":1}
+            {"_id": 0, "patient_name": 1,"patient_history":1,"age":1,"sex":1}
         )
         if patient:
             return jsonify({
                 "patientId": patient_id,
                 "patientName": patient["patient_name"],
-                "patienthistory": patient["patient_history"]
+                "patienthistory": patient["patient_history"],
+                "age": patient["age"],
+                "sex": patient["sex"]
             }), 200
         else:
             return jsonify({"error": "Patient not found"}), 404
