@@ -15,6 +15,7 @@ const ModelPage = () => {
   const [result, setResult] = useState(null);
   const fileInput = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [patientHistory, setPatientHistory] = useState(null);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -43,6 +44,7 @@ const ModelPage = () => {
           console.log("Fetching patient data for patientId:", patientId);
           const patientResponse = await axios.get(`http://127.0.0.1:5000/patient?patient_id=${patientId}`);
           console.log("Patient response:", patientResponse.data);
+          setPatientHistory(JSON.stringify(patientResponse.data));
           if (patientResponse.status === 200) {
             patientName = patientResponse.data.patientName;
           }
@@ -140,10 +142,10 @@ const ModelPage = () => {
       </motion.div>
       {submitted && (
         <div>
-          <pre style={{ margin: "10px", fontSize: "14px", background: "#f0f0f0", padding: "10px" }}>
+          {/* <pre style={{ margin: "10px", fontSize: "14px", background: "#f0f0f0", padding: "10px" }}>
             Debug - Result Prop: {result}
-          </pre>
-          <ResultPage ImgURL={URL.createObjectURL(file)} result={result} />
+          </pre> */}
+          <ResultPage ImgURL={URL.createObjectURL(file)} result={result} history = {patientHistory} />
         </div>
       )}
       {loading && <Loading />}
