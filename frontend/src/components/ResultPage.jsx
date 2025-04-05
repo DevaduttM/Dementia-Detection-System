@@ -3,8 +3,10 @@ import React, { useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 
-const ResultPage = ({ ImgURL, result }) => {
+const ResultPage = ({ ImgURL, result, history }) => {
   const resultData = JSON.parse(result);
+  const patientHistory = JSON.parse(history);
+  console.log("ResultPage received patientHistory:", patientHistory);
   console.log("ResultPage received resultData:", resultData);
 
   const prediction = resultData.prediction.class;
@@ -21,7 +23,7 @@ const ResultPage = ({ ImgURL, result }) => {
   }, [patienthistory]);
 
   return (
-    <div className="absolute top-0 left-0 h-screen min-h-fit w-screen flex justify-center md:flex-row flex-col items-center bg-[#f1e4e4] pt-[4rem]">
+    <div className="absolute top-0 left-0 h-screen min-h-fit w-screen flex justify-center md:flex-row flex-col items-center bg-[#f1e4e4] pt-[4rem] overflow-x-hidden">
       <div className="md:w-[30%] w-[95%] md:h-full h-[90%] flex flex-col items-center justify-around">
         <div className="h-[45%] md:w-[60%] w-[70%] flex justify-center items-center bg-[#fafaf6] shadow-2xl rounded-xl">
           <div className="w-full aspect-square rounded-full flex items-center justify-center flex-col">
@@ -34,26 +36,38 @@ const ResultPage = ({ ImgURL, result }) => {
           </div>
         </div>
         <div className="relative h-[45%] md:w-[60%] w-[70%] flex justify-center items-center bg-[#fafaf6] shadow-2xl rounded-xl flex-col">
-          <p className="text-black">Scan Image</p>
+          <p className="absolute top-3 text-black">Scan Image</p>
           <Image
             src={ImgURL}
             alt="image"
             width={100}
             height={100}
-            className="object-cover scale-[.8] w-full h-auto rounded-xl"
+            className="object-cover md:scale-[.8] scale-[0.6] w-full h-auto rounded-xl"
           />
         </div>
       </div>
-      <div className="md:w-[70%] w-[90%] h-[95%] flex items-center justify-center mb-10 md:mb-0">
-        <div className="relative w-[90%] h-full bg-[#fafaf6] shadow-2xl rounded-xl flex flex-col items-center justify-center">
-          <h1 className="text-4xl text-black font-bodoni-moda ml-5 mt-5">Diagnosis: {prediction || "N/A"}</h1>
-          <h1 className="text-4xl text-black font-bodoni-moda ml-5 mt-5">Confidence: {confidence ? `${confidence} %` : "N/A"}</h1>
+      <div className="md:w-[70%] w-[90%] md:h-[95%] h-[95vh] flex items-center justify-center mb-10 md:mb-0 flex-col gap-10">
+        <div className="relative w-[90%] h-[40%] bg-[#fafaf6] shadow-2xl rounded-xl flex flex-col items-center justify-center">
+          <h1 className="absolute top-5 text-4xl text-black">Result</h1>
+          <h1 className="md:text-3xl text-lg text-black font-bodoni-moda ml-5">Diagnosis: {prediction || "N/A"}</h1>
+          <h1 className="md:text-3xl text-lg text-black font-bodoni-moda ml-5">Confidence: {confidence ? `${confidence} %` : "N/A"}</h1>
           <button
             onClick={() => window.location.reload()}
-            className="bg-blue-500 flex justify-center items-center text-white w-[8rem] h-[3rem] rounded-lg absolute bottom-3"
+            className="bg-blue-500 flex justify-center items-center text-white w-[8rem] md:h-[3rem] h-[2.2rem] rounded-lg absolute bottom-3 cursor-pointer hover:bg-blue-600 transition duration-300 ease-in-out"
           >
             Go Back
           </button>
+        </div>
+        <div className="relative md:h-[50%] h-fit w-[90%] bg-[#fafaf6] shadow-2xl rounded-xl flex justify-center items-center flex-col">
+          <div className="h-[98%] w-[98%] flex justify-center items-center flex-col">
+            <h1 className="absolute top-5 text-3xl text-black">Patient history</h1>
+            <div className="h-full w-full md:pl-10 pl-5 flex flex-col items-start justify-center md:mt-0 mt-[25%]">
+              <p className="text-black text-lg">Name: {patientHistory.patientName}</p>
+              <p className="text-black text-lg">Age: {patientHistory.age}</p>
+              <p className="text-black text-lg mb-5">Sex: {patientHistory.sex}</p>
+              <p className="text-black md:text-sm text-[12px] md:w-[90%] w-[95%] md:mb-0 mb-5">Medical History: {patientHistory.patienthistory}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
