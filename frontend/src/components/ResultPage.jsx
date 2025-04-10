@@ -4,16 +4,31 @@ import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 
 const ResultPage = ({ ImgURL, result, history }) => {
-  const resultData = JSON.parse(result);
-  const patientHistory = JSON.parse(history);
+  let resultData = {};
+  let patientHistory = [];
+
+  try {
+    resultData = result ? JSON.parse(result) : {};
+  } catch (e) {
+    console.error("Invalid result JSON:", result);
+  }
+
+  try {
+    patientHistory = history ? JSON.parse(history) : [];
+  } catch (e) {
+    console.error("Invalid history JSON:", history);
+  }
+
   console.log("ResultPage received patientHistory:", patientHistory);
   console.log("ResultPage received resultData:", resultData);
 
-  const prediction = resultData.prediction.class;
-  const confidence = Number(resultData.prediction.confidence).toFixed(2);
-  const patientId = resultData.patientId;
-  const patientName = resultData.patientName;
-  const patienthistory = resultData.patienthistory;
+  const prediction = resultData?.prediction?.class || "N/A";
+  const confidence = resultData?.prediction?.confidence
+    ? Number(resultData.prediction.confidence).toFixed(2)
+    : "N/A";
+  const patientId = resultData?.patientId || "Unknown";
+  const patientName = resultData?.patientName || "Unknown";
+  const patienthistory = resultData?.patienthistory || "None";
 
  
 
