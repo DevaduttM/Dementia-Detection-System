@@ -1,3 +1,6 @@
 password.py
-/myenv
-/__pycache__
+/venv
+__pycache__/
+
+
+

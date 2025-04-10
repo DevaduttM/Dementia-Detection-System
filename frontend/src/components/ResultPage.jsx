@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const ResultPage = ({ ImgURL, result, history }) => {
   let resultData = {};
-  let patientHistory = [];
+  let patientHistory = {};
 
   try {
     resultData = result ? JSON.parse(result) : {};
@@ -14,7 +14,7 @@ const ResultPage = ({ ImgURL, result, history }) => {
   }
 
   try {
-    patientHistory = history ? JSON.parse(history) : [];
+    patientHistory = history ? JSON.parse(history) : {};
   } catch (e) {
     console.error("Invalid history JSON:", history);
   }
@@ -28,14 +28,13 @@ const ResultPage = ({ ImgURL, result, history }) => {
     : "N/A";
   const patientId = resultData?.patientId || "Unknown";
   const patientName = resultData?.patientName || "Unknown";
-  const patienthistory = resultData?.patienthistory || "None";
-
- 
-
+  const patienthistory = patientHistory?.patienthistory || "None";
+  const images = patientHistory?.images || []; // Extract images array with scanid
+  const newScanId = resultData?.newScanId || "N/A";
 
   useEffect(() => {
-    console.log("Patient History (useEffect):", patienthistory);
-  }, [patienthistory]);
+    console.log("Patient History (useEffect):", patientHistory);
+  }, [patientHistory]);
 
   return (
     <div className="absolute top-0 left-0 h-screen min-h-fit w-screen flex justify-center md:flex-row flex-col items-center bg-[#f1e4e4] pt-[4rem] overflow-x-hidden">
@@ -46,7 +45,7 @@ const ResultPage = ({ ImgURL, result, history }) => {
             <div className="h-[70%] w-[80%] flex justify-center items-start flex-col gap-5">
               <p className="text-black text-left">Patient Name: {patientName || "N/A"}</p>
               <p className="text-black text-left">Patient Id: {patientId || "N/A"}</p>
-              <p className="text-black text-left">Scan Id: {"N/A"}</p>
+              <p className="text-black text-left">Scan Id: {newScanId}</p>
             </div>
           </div>
         </div>
@@ -77,10 +76,30 @@ const ResultPage = ({ ImgURL, result, history }) => {
           <div className="h-[98%] w-[98%] flex justify-center items-center flex-col">
             <h1 className="absolute top-5 text-3xl text-black">Patient history</h1>
             <div className="h-full w-full md:pl-10 pl-5 flex flex-col items-start justify-center md:mt-0 mt-[25%]">
-              <p className="text-black text-lg">Name: {patientHistory.patientName}</p>
-              <p className="text-black text-lg">Age: {patientHistory.age}</p>
-              <p className="text-black text-lg mb-5">Sex: {patientHistory.sex}</p>
-              <p className="text-black md:text-sm text-[12px] md:w-[90%] w-[95%] md:mb-0 mb-5">Medical History: {patientHistory.patienthistory}</p>
+              <p className="text-black text-lg">Name: {patientHistory.patientName || "N/A"}</p>
+              <p className="text-black text-lg">Age: {patientHistory.age || "N/A"}</p>
+              <p className="text-black text-lg mb-5">Sex: {patientHistory.sex || "N/A"}</p>
+              <p className="text-black md:text-sm text-[12px] md:w-[90%] w-[95%]">Medical History: {patienthistory || "None"}</p>
+              <div className="mt-5">
+                <p className="text-black text-lg">Previous Scans:</p>
+                {images.length > 0 ? (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {images.map((image, index) => (
+                      <a
+                        key={index}
+                        href={image.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 underline text-sm hover:text-blue-700"
+                      >
+                        Scan {image.scanid}
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-black text-sm mt-2">No previous scans available</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
