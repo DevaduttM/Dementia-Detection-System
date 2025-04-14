@@ -1,0 +1,9 @@
+Flask
+flask-cors
+flask-pymongo
+cryptography
+certifi
+requests
+tensorflow
+numpy
+Pillow
