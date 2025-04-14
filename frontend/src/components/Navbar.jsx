@@ -53,7 +53,7 @@ const Navbar = () => {
         {user ? (
           <button
             onClick={handleLogout}
-            className={`${navOpen ? `flex` : `hidden`} md:flex justify-center items-center md:w-[8%] md:h-[55%] w-[80%] h-[7%] rounded-lg bg-red-500 text-white hover:bg-red-700 transition duration-300`}
+            className={`${navOpen ? `flex` : `hidden`} md:flex justify-center items-center md:w-[8%] md:h-[55%] w-[80%] h-[7%] rounded-lg bg-red-500 text-white hover:bg-red-700 transition duration-300 cursor-pointer`}
           >
             Logout
           </button>

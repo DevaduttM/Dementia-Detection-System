@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 
-const Loading = () => {
+const Loading = ({message}) => {
   return (
     <>
         <div className="fixed top-0 left-0 z-100 h-screen w-screen bg-[#00000083] flex items-center justify-center">
@@ -12,7 +12,7 @@ const Loading = () => {
                 width={50}
                 height={50}
                 />
-                <h1 className='font-bodoni-moda text-black text-3xl'>Analyzing...</h1>
+                <h1 className='font-bodoni-moda text-black text-3xl'>{message}</h1>
             </div>
         </div>
     </>
