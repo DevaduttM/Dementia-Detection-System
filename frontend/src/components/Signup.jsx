@@ -42,7 +42,7 @@ const Signup = () => {
     const sexValue = sex === 'Other' ? customSex.trim() : sex;
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/signup', {
+      const response = await axios.post('https://alzai.onrender.com/signup', {
         name,
         email,
         password,
