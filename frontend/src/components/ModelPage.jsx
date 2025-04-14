@@ -134,7 +134,7 @@ const ModelPage = () => {
           </div>
         </div>
         <button
-          className="w-[10rem] h-[3rem] bg-[#4a56c0] rounded-xl text-white mb-5 md:mb-0"
+          className="w-[10rem] h-[3rem] bg-[#4a56c0] rounded-xl text-white mb-5 md:mb-0 cursor-pointer hover:shadow-xl transition-all duration-200 ease-in-out"
           onClick={handleSubmit}
         >
           Submit
@@ -148,7 +148,7 @@ const ModelPage = () => {
           <ResultPage ImgURL={URL.createObjectURL(file)} result={result} history = {patientHistory} />
         </div>
       )}
-      {loading && <Loading />}
+      {loading && <Loading message={"Analyzing..."} />}
     </>
   );
 };
