@@ -27,7 +27,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/login", {
+      const response = await axios.post("https://alzai.onrender.com/login", {
         email,
         password,
       });
@@ -35,11 +35,20 @@ const Login = () => {
       if (response.status === 200) {
         localStorage.setItem("user", email);
         setLoading(false);
+        const { patient_id } = response.data;
+        localStorage.setItem("patient_id", patient_id);  
+       
+       
         router.push("/");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid email or password");
-
+      setLoading(false); 
+      setError(err.response?.data?.error || "Invalid email or password");
+      /*if (err.response?.status === 404 && err.response?.data?.error === "User not found") {
+        setError("No User Found"); 
+      } else {
+        setError(err.response?.data?.error || "Invalid email or password");
+      }*/
     }
   };
 

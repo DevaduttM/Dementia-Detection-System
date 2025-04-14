@@ -20,6 +20,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("patient_id");
     setUser(null);
     router.push("/login");
   };

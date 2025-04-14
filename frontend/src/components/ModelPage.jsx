@@ -7,8 +7,14 @@ import Navbar from "./Navbar";
 import { motion } from "framer-motion";
 import axios from "axios";
 import Loading from "./Loading";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+
+
 
 const ModelPage = () => {
+  const router = useRouter();
   const [file, setFile] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [patientId, setPatientId] = useState("");
@@ -17,6 +23,16 @@ const ModelPage = () => {
   const [loading, setLoading] = useState(false);
   const [patientHistory, setPatientHistory] = useState(null);
 
+  useEffect(() => {
+    const storedId = localStorage.getItem("patient_id");
+    if (storedId) {
+      setPatientId(storedId);
+    } else {
+      router.push("/login");
+      
+    }
+  }, []);
+  
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
@@ -34,17 +50,18 @@ const ModelPage = () => {
 
       try {
         console.log("Sending POST to /predict with patientId:", patientId);
-        const predictResponse = await axios.post("http://127.0.0.1:5000/predict", formData, {
+        const predictResponse = await axios.post("https://alzai.onrender.com/predict", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         console.log("Predict response:", predictResponse.data);
 
         let patientName = "Unknown Patient";
+        let patientHistoryData = {};
         try {
           console.log("Fetching patient data for patientId:", patientId);
-          const patientResponse = await axios.get(`http://127.0.0.1:5000/patient?patient_id=${patientId}`);
+          const patientResponse = await axios.get(`https://alzai.onrender.com/patient?patient_id=${patientId}`);
           console.log("Patient response:", patientResponse.data);
-          setPatientHistory(JSON.stringify(patientResponse.data));
+          patientHistoryData = patientResponse.data;
           if (patientResponse.status === 200) {
             patientName = patientResponse.data.patientName;
           }
@@ -61,8 +78,9 @@ const ModelPage = () => {
           ...predictResponse.data,
           patientName: patientName,
         };
-        console.log("Combined result before stringifying:", combinedResult);
-        setResult(JSON.stringify(combinedResult));
+        console.log("Combined result:", combinedResult);
+        setResult(combinedResult);
+        setPatientHistory(patientHistoryData);
         setSubmitted(true);
         setLoading(false);
       } catch (err) {
@@ -102,13 +120,8 @@ const ModelPage = () => {
             )}
           </div>
           <div className="md:w-[45%] w-[90%] h-[70%] flex flex-col items-center justify-center gap-5">
-            <input
-              onChange={(e) => setPatientId(e.target.value)}
-              type="text"
-              required
-              placeholder="Patient ID"
-              className="w-[90%] md:w-full h-[3rem] border-dashed border-[1px] border-[#525252a9] px-3 bg-gray-100 text-black rounded-xl focus:border-none focus:outline-dashed"
-            />
+          <p className="text-black text-xl font-semibold">Patient ID: {patientId}</p>
+
             <div
               onClick={() => fileInput.current.click()}
               className="md:w-full w-[90%] md:h-[70%] h-[45%] border-[1px] border-dashed border-[#525252a9] rounded-xl flex items-center justify-center flex-col cursor-pointer"
@@ -142,10 +155,8 @@ const ModelPage = () => {
       </motion.div>
       {submitted && (
         <div>
-          {/* <pre style={{ margin: "10px", fontSize: "14px", background: "#f0f0f0", padding: "10px" }}>
-            Debug - Result Prop: {result}
-          </pre> */}
-          <ResultPage ImgURL={URL.createObjectURL(file)} result={result} history = {patientHistory} />
+          {console.log("Rendering ResultPage with:", { ImgURL: URL.createObjectURL(file), result, patientHistory })}
+          <ResultPage ImgURL={URL.createObjectURL(file)} result={result} history={patientHistory} />
         </div>
       )}
       {loading && <Loading message={"Analyzing..."} />}

@@ -4,20 +4,9 @@ import { FaUserCircle } from "react-icons/fa";
 import Image from "next/image";
 
 const ResultPage = ({ ImgURL, result, history }) => {
-  let resultData = {};
-  let patientHistory = {};
-
-  try {
-    resultData = result ? JSON.parse(result) : {};
-  } catch (e) {
-    console.error("Invalid result JSON:", result);
-  }
-
-  try {
-    patientHistory = history ? JSON.parse(history) : {};
-  } catch (e) {
-    console.error("Invalid history JSON:", history);
-  }
+  // Use objects directly, no JSON parsing needed
+  let resultData = result || {};
+  let patientHistory = history || {};
 
   console.log("ResultPage received patientHistory:", patientHistory);
   console.log("ResultPage received resultData:", resultData);
@@ -28,9 +17,11 @@ const ResultPage = ({ ImgURL, result, history }) => {
     : "N/A";
   const patientId = resultData?.patientId || "Unknown";
   const patientName = resultData?.patientName || "Unknown";
-  const patienthistory = patientHistory?.patienthistory || "None";
-  const images = patientHistory?.images || []; // Extract images array with scanid
+  const images = patientHistory?.images || [];
   const newScanId = resultData?.newScanId || "N/A";
+
+  // Removed unused patienthistory variable
+  // const patienthistory = patientHistory?.patienthistory || "None";
 
   useEffect(() => {
     console.log("Patient History (useEffect):", patientHistory);
@@ -79,7 +70,7 @@ const ResultPage = ({ ImgURL, result, history }) => {
               <p className="text-black text-lg">Name: {patientHistory.patientName || "N/A"}</p>
               <p className="text-black text-lg">Age: {patientHistory.age || "N/A"}</p>
               <p className="text-black text-lg mb-5">Sex: {patientHistory.sex || "N/A"}</p>
-              <p className="text-black md:text-sm text-[12px] md:w-[90%] w-[95%]">Medical History: {patienthistory || "None"}</p>
+
               <div className="mt-5">
                 <p className="text-black text-lg">Previous Scans:</p>
                 {images.length > 0 ? (
