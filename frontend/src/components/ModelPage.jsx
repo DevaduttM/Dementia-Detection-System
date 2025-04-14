@@ -34,7 +34,7 @@ const ModelPage = () => {
 
       try {
         console.log("Sending POST to /predict with patientId:", patientId);
-        const predictResponse = await axios.post("http://127.0.0.1:5000/predict", formData, {
+        const predictResponse = await axios.post("https://alzai.onrender.com/predict", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         console.log("Predict response:", predictResponse.data);
@@ -42,7 +42,7 @@ const ModelPage = () => {
         let patientName = "Unknown Patient";
         try {
           console.log("Fetching patient data for patientId:", patientId);
-          const patientResponse = await axios.get(`http://127.0.0.1:5000/patient?patient_id=${patientId}`);
+          const patientResponse = await axios.get(`https://alzai.onrender.com/patient?patient_id=${patientId}`);
           console.log("Patient response:", patientResponse.data);
           setPatientHistory(JSON.stringify(patientResponse.data));
           if (patientResponse.status === 200) {
